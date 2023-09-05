@@ -1,16 +1,13 @@
 import java.util.ArrayList;
 
-public class Player {
-    private String name;
-    private Inventory inventory;
+public class Player extends Character{
     private double money;
     private Basket shoppingBasket;
     private Inventory viewOfStoreInventory;
 
     public Player(String playerName, double startingMoney, Inventory startingInventory) {
-        name = playerName;
+        super(playerName, startingInventory);
         money = startingMoney;
-        inventory = startingInventory;
         shoppingBasket = new Basket();
     }
 
@@ -20,11 +17,12 @@ public class Player {
      * and the item is purchased. Otherwise, no changes are made.
      * @param item
      */
+    @Override
     public void buy(ItemInterface item) {
         if (Double.valueOf(item.getInventoryTableRow().getColumnThree().trim()) > money) {
             return;
         }
-        inventory.addOne(item);
+        super.buy(item);
         money -= Double.valueOf(item.getInventoryTableRow().getColumnThree().trim());
     }
 
@@ -34,38 +32,13 @@ public class Player {
      * the item is removed and returned.
      * @param itemName
      */
+    @Override
     public ItemInterface sell(String itemName) {
-        ItemInterface i = removeItem(itemName);
-        if (i != null) {
+        ItemInterface i = super.sell(itemName);
+        if (i != null && !(i instanceof InvalidItem)) {
             money += Double.valueOf(i.getInventoryTableRow().getColumnThree().trim());
-            return i;
         }
-        return null;
-    }
-
-    /**
-     * Adds an item to the held Inventory.
-     * @param item
-     */
-    public void addItem(ItemInterface item) {
-        inventory.addOne(item);
-    }
-
-    /**
-     * Removes and returns an item from the held Inventory that matches
-     * the `itemName` parameter.
-     * @param itemName
-     */
-    public ItemInterface removeItem(String itemName) {
-        return inventory.removeOne(itemName);
-    }
-
-    public Inventory getInventory() {
-        return inventory;
-    }
-
-    public String getName() {
-        return name;
+        return i;
     }
 
     public Basket getShoppingBasket() {

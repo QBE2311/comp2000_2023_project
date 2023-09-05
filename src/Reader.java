@@ -34,8 +34,8 @@ public class Reader {
             System.exit(0);
         }
 
-        Seller store = null;
-        Player player = null;
+        Seller store = new Seller("storeName", new Inventory());
+        Player player = new Player("playerName", 0.0d, new Inventory());
 
         String line = "";
         while (scanner.hasNextLine()) {

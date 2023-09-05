@@ -29,9 +29,7 @@ public class ItemReader {
         } else if (name.equals("Wand")) {
             return new Wand(expiration);
         } else {
-            System.err.println("Bad Item read in ItemReader");
-            System.exit(0);
-            return null;
+            return new InvalidItem(expiration);
         }
     }
 }

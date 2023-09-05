@@ -64,7 +64,7 @@ public class Basket implements BasketInterface {
         for (int i = 0; i < items.size() && !rollback; i++) {
             for (int q = 0; q < quantities.get(i); q++) {
                 ItemInterface saleItem = from.sell(items.get(i).getInventoryTableRow().getColumnOne());
-                if (saleItem == null) {
+                if (saleItem == null || saleItem instanceof InvalidItem) {
                     rollback = true;
                     break;  // Trigger transaction rollback
                 }
@@ -91,7 +91,7 @@ public class Basket implements BasketInterface {
         for (int i = 0; i < items.size() && !rollback; i++) {
             for (int q = 0; q < quantities.get(i); q++) {
                 ItemInterface saleItem = from.sell(items.get(i).getInventoryTableRow().getColumnOne());
-                if (saleItem == null) {
+                if (saleItem == null || saleItem instanceof InvalidItem) {
                     rollback = true;
                     break;  // Trigger transaction rollback
                 }
