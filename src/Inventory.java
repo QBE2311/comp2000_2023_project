@@ -44,7 +44,7 @@ public class Inventory {
     public ItemInterface removeOne(String itemName) {   
         int removeFromIdx = indexOfItemByName(itemName);
         if (removeFromIdx == -1) {
-            return new InvalidItem(-1);
+            return new Item(-1);
         }
 
         return stock.remove((int) removeFromIdx);

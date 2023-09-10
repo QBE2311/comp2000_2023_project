@@ -22,14 +22,6 @@ public class ItemReader {
         if (!expiry.isEmpty()) {
             expiration = Integer.valueOf(expiry);
         }
-        if (name.equals("Tomato")) {
-            return new Tomato(expiration);
-        } else if (name.equals("Rock")) {
-            return new Rock(expiration);
-        } else if (name.equals("Wand")) {
-            return new Wand(expiration);
-        } else {
-            return new InvalidItem(expiration);
-        }
+        return new Item(name,description,value,expiration);
     }
 }

@@ -22,7 +22,7 @@ public class Player extends Character{
         if (Double.valueOf(item.getInventoryTableRow().getColumnThree().trim()) > money) {
             return;
         }
-        super.buy(item);
+        inventory.addOne(item);
         money -= Double.valueOf(item.getInventoryTableRow().getColumnThree().trim());
     }
 
@@ -35,7 +35,7 @@ public class Player extends Character{
     @Override
     public ItemInterface sell(String itemName) {
         ItemInterface i = super.sell(itemName);
-        if (i != null && !(i instanceof InvalidItem)) {
+        if (i != null && !(i.getItemName().equals("Invalid Item"))) {
             money += Double.valueOf(i.getInventoryTableRow().getColumnThree().trim());
         }
         return i;

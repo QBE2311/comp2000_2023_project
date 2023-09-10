@@ -26,10 +26,10 @@ public abstract class Character {
      */
     public ItemInterface sell(String itemName) {
         ItemInterface result = removeItem(itemName);
-        if (result != null && !(result instanceof InvalidItem)) {
+        if (result != null && !(result.getItemName().equals("Invalid Item"))) {
             return result;
         }
-        return new InvalidItem(-1);
+        return new Item(-1);
     }
 
     /**
