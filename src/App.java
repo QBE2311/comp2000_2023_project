@@ -34,18 +34,18 @@ public class App {
     // Task 1: Defining what each button in the UI will do.
     void setupSearching(InventoryPage page) {
         page.addSearchByButton(new SearchByButton("All", () -> {
-            player.getInventory().setSearch("All");
-            player.getStorageView().setSearch("All");
+            player.getInventory().setSearch(new SearchByAll());
+            player.getStorageView().setSearch(new SearchByAll());
         }));
 
         page.addSearchByButton(new SearchByButton("Name", () -> {
-            player.getInventory().setSearch("Name");
-            player.getStorageView().setSearch("Name");
+            player.getInventory().setSearch(new SearchByName());
+            player.getStorageView().setSearch(new SearchByName());
         }));
 
         page.addSearchByButton(new SearchByButton("Description", () -> {
-            player.getInventory().setSearch("Description");
-            player.getStorageView().setSearch("Description");
+            player.getInventory().setSearch(new SearchByDescription());
+            player.getStorageView().setSearch(new SearchByDescription());
         }));
     }
 
