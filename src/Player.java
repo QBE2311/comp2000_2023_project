@@ -57,4 +57,8 @@ public class Player {
         inventory.addOne(storage.retrieve(item));
     }
     
+    public void craftItem(ItemDefinition recipe) throws ItemNotAvailableException {
+        recipe.craftItem(inventory);
+    }
+
 }

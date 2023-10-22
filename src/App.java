@@ -50,7 +50,7 @@ public class App {
     }
 
     void setupCrafting(ItemCraftPage page, Player player) {
-        page.setCraftAction((def) -> System.out.println("Crafting not implemented"));
+        page.setCraftAction((def) -> player.craftItem(def));
     }
 
     void setupUncrafting(ProductPage page, Player player) {

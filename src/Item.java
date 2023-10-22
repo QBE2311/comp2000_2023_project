@@ -1,5 +1,8 @@
+import java.util.ArrayList;
+
 public class Item implements ItemInterface {
     private ItemDefinition definition;
+    private ArrayList<ItemInterface> componentList;
 
     /**
      * Creates an Item instance with a set definition.
@@ -9,12 +12,18 @@ public class Item implements ItemInterface {
      */
     public Item(ItemDefinition def) {
         definition = def;
+        componentList = new ArrayList<ItemInterface>();
     }
 
     @Override
     public double getWeight() {
         double weight = definition.getWeight().orElse(0.0);
         // If the item is made up of other items, we should find the sum of weights
+        if(componentList != null && !componentList.isEmpty()) {
+            for(ItemInterface component : componentList) {
+                weight += component.getWeight();
+            }
+        }
         return weight;
     }
 
@@ -38,7 +47,15 @@ public class Item implements ItemInterface {
         // For craftable items, this method should return a description describing/listing the
         // other items which make up this item.
         // When a non-empty String is returned, the uncraft button will appear in the UI.
-        return "";
+        String description = "";
+
+        if(!componentList.isEmpty()) {
+            for(ItemInterface item : componentList) {
+                description += item.getName() + ", ";
+            }
+            description = description.substring(0,description.length()-2) + ".";
+        }
+        return description;
     }
 
     @Override
@@ -57,6 +74,14 @@ public class Item implements ItemInterface {
             getName(), getDescription(), getWeight());
         output += "\nHashCode: " + Integer.toHexString(this.hashCode());
         return output;
+    }
+
+    @Override
+    public void Add(ItemInterface component) {
+        if(componentList == null){
+            componentList = new ArrayList<ItemInterface>();
+        }
+        componentList.add(component);
     }
 
 }

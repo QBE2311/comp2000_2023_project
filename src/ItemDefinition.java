@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class ItemDefinition {
@@ -6,6 +7,7 @@ public class ItemDefinition {
     private String[] componentNames;
     private boolean isBaseItem;
     private Optional<Double> weight;
+    private ItemDictionary dict;
 
     public ItemDefinition(String n, String desc, Optional<Double> weightIfBase, String[] components) {
         name = n;
@@ -14,8 +16,8 @@ public class ItemDefinition {
         isBaseItem = weightIfBase.isPresent();
         weight = weightIfBase;
 
-        // This may be helpful for the compsite pattern to find the appropriate item definitions
-        ItemDictionary dict = ItemDictionary.get();
+        // This may be helpful for the composite pattern to find the appropriate item definitions
+        dict = ItemDictionary.get();
 
     }
 
@@ -28,11 +30,35 @@ public class ItemDefinition {
         Item item = new Item(this);
         // An ItemDefinition for a craftable item might follow a similar pattern
         // to how a craftable/composite item looks.
+        if(!this.isBaseItem){
+            for(int i = 0; i < componentNames.length; i++) {
+                item.Add(dict.defByName(componentNames[i]).orElseThrow().create());
+            }
+        }
         return item;
     }
 
     // ItemDefinition might "craft" and return an item, using items from some source inventory.
     // You might use the Milestone 1 Basket transaction code as a guide
+
+    public void craftItem(Inventory inventory) throws ItemNotAvailableException {
+        ArrayList<ItemDefinition> recipeDefs = new ArrayList<>();
+        // Check the inventory contains all components before touching any items
+        for(int i = 0; i < componentNames.length; i++) {
+            recipeDefs.add(dict.defByName(componentNames[i]).orElseThrow());
+            if(inventory.qtyOf(recipeDefs.get(i)) <= 0) {
+                throw new ItemNotAvailableException(recipeDefs.get(i));
+            }
+        }
+        // Create the new item
+        Item newItem = new Item(this);
+        // Remove the required items from the inventory and add them to the crafted item's component list
+        for(ItemDefinition partDef : recipeDefs) {
+            newItem.Add(inventory.removeOne(partDef));
+        }
+        // Finally, add the new item to the inventory
+        inventory.addOne(newItem);
+    }
 
     public String getName() {
         return name;
